@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>菜品云台 · 新疆餐厅</title>
+
+  <!-- 样式文件：从 css 文件夹加载 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- ===== 顶部（红色导航区） ===== -->
+  <header class="topbar">
+    <div class="container">
+      <nav class="nav">
+        <!-- 品牌区：图标 + 名称（LOGO图可以换成 <img>） -->
+        <div class="brand">
+          <div class="logo">囊</div>
+          <div>新疆味·云台</div>
+        </div>
+
+        <!-- 顶部链接（可只保留当前页） -->
+        <div class="nav-links">
+          <a class="active" href="#">菜品云台</a>
+          <a href="#">菜品诊断</a>
+          <a href="#">采购计划</a>
+          <a href="#">系统设置</a>
+        </div>
+
+        <!-- 搜索 + 日期 + 同步按钮 -->
+        <div class="nav-tools">
+          <div class="input">
+            <span>🔎</span>
+            <input id="searchBox" placeholder="搜索评价/菜品/关键词…" />
+          </div>
+          <input id="datePicker" type="date" class="date" />
+          <button class="btn">同步数据</button>
+        </div>
+      </nav>
+
+      <!-- 顶部横幅（Hero） -->
+      <section class="hero">
+        <!-- 左侧：主推荐卡片 -->
+
+        <!-- 原来的 .hero-card 内部 -->
+        <div class="hero-card">
+          <div class="hero-text">
+            <div class="hero-badge">🔥 今日口碑热度 +26%</div>
+            <h1>用户都在夸：<span class="hi">招牌烤肉串</span></h1>
+            <p>聚合外卖与社交媒体反馈，展示评分、关键词与情绪趋势，指导菜品迭代与前厅决策。</p>
+            <div class="hero-cta">
+              <button class="btn btn-primary">查看热销菜</button>
+              <button class="btn btn-ghost">查看差评修复</button>
+            </div>
+          </div>
+
+          <!-- 新增包裹：hero-media（建议） -->
+          <div class="hero-media">
+            
+          </div>
+        </div>
+
+        <!-- 右侧：两个促销/提醒横幅 -->
+        <div class="side-banners">
+          <div class="banner yellow">
+            <div>
+              <h3>活动建议：买二送一 · 馕坑肉</h3>
+              <small>近7日转化+12%，适合周末午晚高峰</small>
+            </div>
+            <img
+              class="art"
+              src="assets/promo1.png"
+              alt="促销推荐"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1604908554007-3fd82d80d9ad?q=80&w=600&auto=format&fit=crop';"
+            />
+          </div>
+          <div class="banner red">
+            <div>
+              <h3>差评预警：拉条子偏咸</h3>
+              <small>来自“小红书/大众点评”集中反馈</small>
+            </div>
+            <img
+              class="art"
+              src="assets/alert1.png"
+              alt="问题提醒"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1612927601620-b1c6b4bd2bd6?q=80&w=600&auto=format&fit=crop';"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  </header>
+
+  <!-- ===== 分类条（已修复“被顶栏压住/偏移”） ===== -->
+  <div class="container">
+    <div id="categoryBar" class="categories">
+      <!-- 需要增删分类时，改这里的 chip 即可 -->
+      <button class="chip active" data-cat="全部"><span class="emoji">🍽️</span>全部</button>
+      <button class="chip" data-cat="抓饭"><span class="emoji">🍚</span>抓饭</button>
+      <button class="chip" data-cat="烤肉"><span class="emoji">🍢</span>烤肉</button>
+      <button class="chip" data-cat="烤包子"><span class="emoji">🥟</span>烤包子</button>
+      <button class="chip" data-cat="手抓羊肉"><span class="emoji">🍖</span>手抓羊肉</button>
+      <button class="chip" data-cat="馕"><span class="emoji">🥯</span>馕</button>
+      <button class="chip" data-cat="拉条子"><span class="emoji">🍜</span>拉条子</button>
+      <button class="chip" data-cat="饮品"><span class="emoji">🥤</span>饮品</button>
+    </div>
+  </div>
+
+  <!-- ===== 平台宫格 + 今日总览 ===== -->
+  <section class="container overview">
+    <div class="platforms">
+      <div class="section-head">
+        <h3 class="h3">美食平台聚合</h3>
+        <small class="muted">点击平台可筛选评论来源</small>
+      </div>
+      <div class="grid-plat" id="platformGrid"><!-- JS 动态注入 --></div>
+    </div>
+
+    <aside class="summary">
+      <div class="section-head">
+        <h3 class="h3">今日总览</h3>
+        <small class="muted">自动随筛选联动</small>
+      </div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="label">总评价数</div>
+          <div id="kpiTotal" class="kpi-num">—</div>
+          <small class="muted">较昨日 <b id="kpiTotalDelta">+0%</b></small>
+        </div>
+        <div class="kpi">
+          <div class="label">好评率</div>
+          <div class="kpi-row">
+            <div id="kpiGood" class="kpi-num">—</div>
+            <div class="progress"><i id="goodBar" style="width:0%"></i></div>
+          </div>
+          <small class="muted">平均评分 <b id="kpiScore">4.8</b></small>
+        </div>
+      </div>
+      <div class="card" style="padding:14px">
+        <div class="title-sm">平台占比</div>
+        <canvas id="pie" class="pie"></canvas>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ===== 主体：关键词 + 预警 + 评论流 + 菜品卡 ===== -->
+  <main class="container main">
+    <section class="card">
+      <h3 class="title">热点关键词</h3>
+      <div id="keywordBox" class="chips"><!-- JS 动态注入 --></div>
+      <canvas id="trend" class="miniChart"></canvas>
+    </section>
+
+    <aside class="card">
+      <h3 class="title">投诉预警</h3>
+      <div class="list" id="alerts"><!-- JS 动态注入 --></div>
+    </aside>
+
+    <section class="card wide">
+      <div class="section-head">
+        <h3 class="title">最新评论</h3>
+        <small class="muted" id="reviewHint">显示全部平台 · 全部品类</small>
+      </div>
+      <div class="list" id="reviews"><!-- JS 动态注入 --></div>
+    </section>
+
+    <section class="card wide">
+      <div class="section-head"><h3 class="title">Popular Dishes（样式区，可换成你的菜品图）</h3></div>
+      <div class="dishes" id="dishGrid"><!-- JS 动态注入 --></div>
+    </section>
+  </main>
+
+  <div class="footer">© 2025 新疆餐厅 · 菜品云台</div>
+
+  <!-- 业务脚本 -->
+  <script src="app.js" defer></script>
+</body>
+</html>
