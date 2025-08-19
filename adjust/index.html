@@ -13,32 +13,36 @@
 <body>
   <!-- 顶部 -->
   <div class="topbar">
-    <nav class="nav">
-        <!-- 品牌区：图标 + 名称（LOGO图可以换成 <img>） -->
+   <!-- 改成 header -->
+    <!-- 顶部 -->
+    <header class="topbar">
+    <div class="container">
+        <nav class="nav">
+        <!-- 品牌区 -->
         <div class="brand">
-          <div class="logo">囊</div>
-          <div>新疆味·云台</div>
+            <div class="logo">囊</div>
+            <div>新疆味·云台</div>
         </div>
 
-        <!-- 顶部链接（可只保留当前页） -->
+        <!-- 顶部链接 -->
         <div class="nav-links">
-          <div class="nav-links">
-          <a href="../index/index.html">菜品云台</a>
-          <a class="active" href="./">菜品调整</a>
-          <a href="../procure/">采购管理</a>
-          </div>
+            <a href="../index/index.html">菜品云台</a>
+            <a class="active" href="./">菜品调整</a>
+            <a href="../procure/">采购管理</a>
         </div>
 
-        <!-- 搜索 + 日期 + 同步按钮 -->
+        <!-- 搜索 + 日期 + 按钮 -->
         <div class="nav-tools">
-          <div class="input">
+            <div class="input">
             <span>🔎</span>
             <input id="searchBox" placeholder="搜索评价/菜品/关键词…" />
-          </div>
-          <input id="datePicker" type="date" class="date" />
-          <button class="btn">同步数据</button>
+            </div>
+            <input id="datePicker" type="date" class="date" />
+            <button class="btn">同步数据</button>
         </div>
-      </nav>
+        </nav>
+    </div>
+    </header>
 
     <!-- 筛选 -->
     <div class="container">
