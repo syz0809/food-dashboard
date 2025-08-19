@@ -38,9 +38,9 @@ window.addEventListener('DOMContentLoaded', () => {
   ];
 
   const DISHES = [
-    {name:'烤包子', price:3.9, rating:4.9, img:'./assets/dish_kaobaozi.png'},
-    {name:'羊肉抓饭', price:27, rating:4.8, img:'./assets/dish_zhuafan.png'},
-    {name:'新疆拉条子', price:26, rating:4.6, img:'./assets/dish_latiaozhi.png'}
+    {name:'烤包子', price:3.9, rating:4.9, img:'../assets/dish_kaobaozi.png'},
+    {name:'羊肉抓饭', price:27, rating:4.8, img:'../assets/dish_zhuafan.png'},
+    {name:'新疆拉条子', price:26, rating:4.6, img:'../assets/dish_latiaozhi.png'}
 ];
 
   const HIST_DAILY = [420, 480, 515, 500, 560, 590, 610];   // 默认趋势

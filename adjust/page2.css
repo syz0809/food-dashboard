@@ -1,0 +1,136 @@
+/* 与顶部保持间距 */
+.topbar{ padding-bottom:14px; }
+.main--adjust{ margin-top:14px; }
+
+/* 主布局（左主右辅） */
+.main--adjust{ grid-template-columns: 2.2fr .9fr; }
+.main--adjust .left{ display:grid; gap:20px; }
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+/* ===== 筛选条 ===== */
+.filters{
+  display:grid; grid-template-columns: 1.2fr 1.2fr .9fr 1.7fr; gap:14px;
+  padding:10px 0 16px;
+}
+.filter .label{ font-weight:800; margin-bottom:6px }
+.tiny-actions{ margin-left:8px; font-weight:400; font-size:12px; }
+.tiny-actions button{
+  border:none; background:transparent; color:#fff; opacity:.85; cursor:pointer; padding:0 4px;
+}
+.tiny-actions button:hover{ text-decoration:underline; }
+
+/* 通用胶囊条 */
+.pill-bar{ display:flex; flex-wrap:wrap; gap:8px }
+.pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px; background:#fff;
+  border:1px solid #ffd6cc; cursor:pointer; font-weight:700; color:#a33;
+  transition:all .15s ease;
+}
+.pill:hover{ border-color:#ff8a65; background:#fffdf9; }
+.pill.on{
+  background:var(--primary,#e53935); color:#fff; border-color:transparent;
+  box-shadow:0 6px 14px rgba(229,57,53,.18);
+}
+.pill .ico{ width:18px; height:18px; object-fit:contain; }
+
+/* 情绪分段 */
+.seg{ display:flex; background:#fff; border-radius:12px; padding:4px; gap:4px; box-shadow: var(--shadow) }
+.seg button{ border:none; background:transparent; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:800; color:#a33 }
+.seg button.on{ background:#ffe0db; color:#b22222; }
+
+/* 评分区间 */
+.filter.range{ display:grid }
+.filter.range input[type="range"]{ width:100%; }
+.range-hint{ font-size:12px; color:#ffe0e0; }
+#rangeText,#rangeText2{ font-weight:800 }
+
+/* ===== 候选菜品列表 ===== */
+.dish-list-wrap{
+  max-height: 520px;
+  overflow:auto;
+  padding-right: 6px;
+}
+.dish-list{ display:grid; grid-template-columns: repeat(3, minmax(240px,1fr)); gap:16px }
+@media (max-width: 1100px){ .dish-list{ grid-template-columns: repeat(2, minmax(220px,1fr)); } }
+@media (max-width: 560px){  .dish-list{ grid-template-columns: 1fr; } }
+
+.dish-card{
+  border:1px solid #f0f0f0; border-radius:16px; padding:12px;
+  display:grid; gap:8px; background:#fff; position:relative; cursor:pointer;
+}
+.dish-card .badge{
+  position:absolute; right:10px; top:10px; background:#0ea5e9; color:#fff;
+  padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; display:none;
+}
+.dish-card.adjusted .badge{ display:inline-block }
+.kpi{ background:#fff; border-radius:14px; padding:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid #f4f4f4 }
+.dish-card:hover{ box-shadow:var(--shadow) }
+
+/* 饼图 */
+.pie{ width:100%; height:240px }
+
+/* ===== 弹窗 ===== */
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; z-index:9 }
+.modal.hide{ display:none }
+.dialog{ width:min(980px,92vw); background:#fff; border-radius:16px; box-shadow:var(--shadow); overflow:hidden }
+.dialog__hd{ display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #f2f2f2 }
+.dialog__bd{ padding:16px; display:grid; gap:12px }
+.dialog__ft{ padding:12px 16px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid #f2f2f2 }
+.x{ border:none; background:#fff; border-radius:8px; padding:6px; cursor:pointer }
+.md-row{ display:grid; gap:6px }
+.sug{ margin:0; padding-left:18px }
+.md-last{ background:#fff; border:1px solid #f4f4f4; border-radius:10px; padding:8px }
+
+/* 浮窗三列栅格 */
+.md-grid{
+  grid-template-columns: 1fr 1.1fr 1.3fr;
+  gap:16px;
+}
+.md-col{ display:grid; gap:10px }
+.kpi-row-2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+.kpi b{ font-size:22px; font-weight:900 }
+
+/* 胶囊未选中态 */
+.pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px; background:#fff;
+  border:1px solid #ffd6cc; cursor:pointer; font-weight:700; color:#a33;
+  transition:all .15s ease;
+}
+
+/* 胶囊选中态：深红 + 外发光，和页头背景明显区分 */
+.pill.on{
+  background:#b22222;     /* 深红，避免与渐变顶栏撞色 */
+  color:#fff;
+  border-color:#b22222;
+  box-shadow:0 6px 16px rgba(178,34,34,.25), 0 0 0 2px rgba(255,255,255,.8) inset;
+}
+
+/* 鼠标悬停高亮 */
+.pill:hover{
+  border-color:#ff8a65;
+  background:#fffaf6;
+}
+
+/* 情绪分段：未选中 */
+.seg button{
+  border:1px solid #ffd6cc;
+  background:#fff;
+  color:#b2432f;
+  padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:800;
+}
+
+/* 情绪分段：选中态（粉底+红字+外轮廓） */
+.seg button.on{
+  background:#ffe0db;
+  color:#9e1f1f;
+  border-color:#ff8a65;
+  box-shadow:0 0 0 2px #fff inset;
+}
+
+/* 无障碍聚焦态（Tab 键切换更明显） */
+.pill:focus-visible, .seg button:focus-visible{
+  outline:3px solid #ffcc00;
+  outline-offset:2px;
+}

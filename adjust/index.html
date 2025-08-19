@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>菜品调整 · 数字菜品库</title>
+
+  <!-- 公共样式（第一页的） -->
+  <link rel="stylesheet" href="../index/style.css">
+  <!-- 本页样式 -->
+  <link rel="stylesheet" href="./page2.css">
+</head>
+<body>
+  <!-- 顶部 -->
+  <div class="topbar">
+    <div class="container nav">
+      <div class="brand"><div class="logo">🍢</div>数字菜品库</div>
+
+      <div class="nav-links">
+        <a href="../index/index.html">菜品云台</a>
+        <a class="active" href="./">菜品调整</a>
+        <a href="../procure/">采购管理</a>
+      </div>
+
+      <div class="nav-tools">
+        <div class="input"><input id="q" placeholder="搜菜品 / 评价关键词"/></div>
+        <input id="d" class="date" type="date"/>
+      </div>
+    </div>
+
+    <!-- 筛选 -->
+    <div class="container">
+      <div id="filters" class="filters">
+        <!-- 平台 -->
+        <div class="filter">
+          <div class="label">平台
+            <span class="tiny-actions">
+              <button id="platAll" type="button">全选</button>
+              <button id="platNone" type="button">清空</button>
+            </span>
+          </div>
+          <div id="platBar" class="pill-bar"></div>
+        </div>
+
+        <!-- 分类 -->
+        <div class="filter">
+          <div class="label">分类</div>
+          <div id="catBar" class="pill-bar"></div>
+        </div>
+
+        <!-- 情绪 -->
+        <div class="filter">
+          <div class="label">情绪</div>
+          <div class="seg" id="sentSeg">
+            <button data-sent="all" class="on">全部</button>
+            <button data-sent="pos">好评</button>
+            <button data-sent="neg">差评</button>
+          </div>
+        </div>
+
+        <!-- 评分区间 -->
+        <div class="filter range">
+          <div class="label">评分区间 <b id="rangeText">1–5</b></div>
+          <!-- 上：最低评分；下：最高评分 -->
+          <input id="scoreMin" type="range" min="1" max="5" step="1" value="1">
+          <input id="scoreMax" type="range" min="1" max="5" step="1" value="5">
+          <div class="range-hint muted" style="margin-top:6px">
+            上：最低评分（左滑块）　下：最高评分（右滑块）　当前：<b id="rangeText2">1–5</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主体 -->
+  <div class="container main main--adjust">
+    <!-- 左侧 -->
+    <section class="left">
+      <div class="card">
+        <h3 class="title">候选菜品（基于近期评价与筛选）</h3>
+        <div class="dish-list-wrap">
+          <div id="dishList" class="dish-list"></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="title">待处理问题</h3>
+          <div id="issues" class="list"></div>
+        </div>
+        <div class="card">
+          <h3 class="title">差评热词趋势</h3>
+          <canvas id="badTrend" class="miniChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="title">近7日差评趋势</h3>
+          <canvas id="negLine" class="miniChart" height="220"></canvas>
+        </div>
+        <div class="card">
+          <h3 class="title">来源平台占比</h3>
+          <canvas id="pie" class="pie" height="240"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧待办 -->
+    <aside class="right card">
+      <h3 class="title">待办面板</h3>
+      <div id="todo" class="list"></div>
+      <div class="muted" style="margin-top:8px">来自“调整面板”的保存动作会汇总到这里</div>
+    </aside>
+  </div>
+
+  <!-- 调整面板（浮窗） -->
+  <div id="modal" class="modal hide" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <div class="dialog__hd">
+        <b id="mdTitle">调整配方</b>
+        <button id="mdClose" class="x" aria-label="关闭">✕</button>
+      </div>
+
+      <div class="dialog__bd md-grid">
+        <!-- 左：调整表单 -->
+        <div class="md-col">
+          <div class="md-row">
+            <label for="mdSalt">减盐（%）<span class="muted">（-50 ~ +50）</span></label>
+            <input id="mdSalt" type="number" min="-50" max="50" step="1" value="0">
+          </div>
+          <div class="md-row">
+            <label for="mdSpice">加辣（等级）</label>
+            <select id="mdSpice">
+              <option>不变</option><option>微辣</option><option>中辣</option><option>重辣</option>
+            </select>
+          </div>
+          <div class="md-row">
+            <label for="mdNote">出餐备注</label>
+            <input id="mdNote" placeholder="如：高峰期预分单/加清汤/吸油纸…">
+          </div>
+          <div class="md-row">
+            <label>系统建议</label>
+            <ul id="mdSug" class="sug"></ul>
+          </div>
+        </div>
+
+        <!-- 中：评价概览 + 最近销量 -->
+        <div class="md-col">
+          <div class="kpi-row-2">
+            <div class="kpi"><div>好评</div><b id="mdGoodCnt">0</b></div>
+            <div class="kpi"><div>差评</div><b id="mdBadCnt">0</b></div>
+          </div>
+          <div class="md-row">
+            <label>最近评价</label>
+            <div id="mdLastReview" class="md-last muted">—</div>
+          </div>
+          <div class="md-row">
+            <label>最近销量（7天）</label>
+            <div id="mdSales7" class="muted">—</div>
+          </div>
+        </div>
+
+        <!-- 右：销量趋势 + AI 建议 -->
+        <div class="md-col">
+          <div class="md-row">
+            <label>销量趋势（14天）</label>
+            <canvas id="mdSalesLine" class="miniChart" height="180"></canvas>
+          </div>
+          <div class="md-row">
+            <label>AI 总结建议</label>
+            <ul id="mdAdvice" class="sug"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog__ft">
+        <button id="mdSave" class="btn btn-primary">保存调整</button>
+        <button id="mdCancel" class="btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 逻辑 -->
+  <script src="../index/app.js"></script><!-- 如果没有，可忽略 -->
+  <script src="./page2.js"></script>
+</body>
+</html>
