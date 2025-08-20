@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>采购管理 · 数字菜品库</title>
+
+  <!-- 复用第一页样式 -->
+  <link rel="stylesheet" href="../index/style.css">
+  <!-- 本页样式 -->
+  <link rel="stylesheet" href="./procure.css">
+</head>
+<body>
+  <!-- 顶部：与前两页一致 -->
+  <header class="topbar">
+    <div class="container">
+      <nav class="nav">
+        <div class="brand">
+          <div class="logo">囊</div>
+          <div>新疆味·云台</div>
+        </div>
+        <div class="nav-links">
+          <a href="../index/index.html">菜品云台</a>
+          <a href="../adjust/index.html">菜品调整</a>
+          <a class="active" href="./">采购管理</a>
+        </div>
+        <div class="nav-tools">
+          <div class="input">
+            <span>🔎</span>
+            <input id="q" placeholder="搜索物料/供应商/类别…" />
+          </div>
+          <input id="datePicker" type="date" class="date" />
+          <button class="btn" id="syncBtn">同步数据</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main main--procure">
+    <!-- 左侧：物料清单 + 过滤 -->
+    <aside class="card left-col">
+      <h3 class="title">物料清单</h3>
+
+      <div class="filter-group">
+        <div class="label">分类</div>
+        <div id="catBar" class="pill-bar"></div>
+      </div>
+
+      <div class="filter-group">
+        <div class="label">供应商</div>
+        <div id="vendorBar" class="pill-bar"></div>
+      </div>
+
+      <div class="filter-group">
+        <div class="label">安全库存阈值</div>
+        <div class="seg" id="safetySeg">
+          <button data-level="all" class="on">低/中/高</button>
+          <button data-level="low">低</button>
+          <button data-level="mid">中</button>
+          <button data-level="high">高</button>
+        </div>
+      </div>
+
+      <div id="matList" class="mat-list"></div>
+    </aside>
+
+    <!-- 中列：采购预测 -->
+    <section class="card mid-col">
+      <div class="section-head">
+        <h3 class="title">采购预测</h3>
+        <small class="muted">基于近14天销量与到货周期（可点击左侧物料“查看预测”更新）</small>
+      </div>
+
+      <!-- 总体预测折线 -->
+      <canvas id="fcLine" class="miniChart" height="220"></canvas>
+
+      <!-- KPI 更紧凑 -->
+      <div class="kpis kpis-3">
+        <div class="kpi">
+          <div class="label">建议采购量（7天）</div>
+          <div id="kpiSuggest" class="kpi-num">—</div>
+        </div>
+        <div class="kpi">
+          <div class="label">预计缺口</div>
+          <div id="kpiGap" class="kpi-num">—</div>
+        </div>
+        <div class="kpi">
+          <div class="label">平均到货周期（天）</div>
+          <div id="kpiLead" class="kpi-num">—</div>
+        </div>
+      </div>
+
+      <!-- 填充空白：缺口 Top3 -->
+      <div class="gapbox">
+        <div class="gapbox__hd">
+          <b>缺口 Top3</b>
+          <small class="muted" id="gapHint">按安全库存与现库存计算</small>
+        </div>
+        <ul id="gapList" class="gap-list"></ul>
+      </div>
+    </section>
+
+    <!-- 右列：待采购清单 -->
+    <section class="card right-col">
+      <div class="section-head">
+        <h3 class="title">待采购清单</h3>
+        <div class="actions">
+          <button id="btnGenPO" class="btn btn-primary">生成采购单</button>
+          <button id="btnClearPO" class="btn">清空</button>
+        </div>
+      </div>
+      <div class="po-head">
+        <span>物料</span><span>供应商</span><span>现库存</span><span>安全库存</span><span>预测 7 天</span><span>到货周期(天)</span><span>建议采购</span>
+      </div>
+      <div id="poList" class="po-list"></div>
+    </section>
+  </main>
+
+  <!-- 预测详情浮窗 -->
+  <div id="md" class="modal hide">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <div class="dialog__hd">
+        <b id="mdTitle">预测详情</b>
+        <button id="mdClose" class="x">✕</button>
+      </div>
+
+      <div class="dialog__bd md-grid">
+        <div class="md-col">
+          <div class="md-row"><label>物料</label><div id="mdName" class="md-val">—</div></div>
+          <div class="md-row"><label>供应商</label><div id="mdVendor" class="md-val">—</div></div>
+          <div class="md-row"><label>分类</label><div id="mdCat" class="md-val">—</div></div>
+          <div class="md-row"><label>现库存</label><div id="mdStock" class="md-val">—</div></div>
+          <div class="md-row"><label>安全库存</label><div id="mdSafety" class="md-val">—</div></div>
+          <div class="md-row"><label>到货周期(天)</label><div id="mdLead" class="md-val">—</div></div>
+          <div class="md-row"><label>AI 建议</label><ul id="mdAdvice" class="sug"></ul></div>
+        </div>
+
+        <div class="md-col">
+          <div class="md-row">
+            <label>最近销量（7 天）</label>
+            <div id="mdSales7" class="muted">—</div>
+            <canvas id="mdSales7Line" class="miniChart" height="120"></canvas>
+          </div>
+          <div class="md-row">
+            <label>预测曲线（14 天）</label>
+            <canvas id="mdFc14" class="miniChart" height="160"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog__ft">
+        <button id="mdAdd" class="btn btn-primary">加入待采购</button>
+        <button id="mdCancel" class="btn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./procure.js"></script>
+</body>
+</html>

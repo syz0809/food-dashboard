@@ -1,0 +1,82 @@
+/* 页面主布局间距更舒适 */
+.main--procure{ 
+  grid-template-columns: 1.1fr 1.6fr 1.2fr; 
+  gap: 22px; 
+  margin-top: 14px;
+}
+
+/* 左侧过滤块 */
+.filter-group{ margin-bottom: 14px; }
+.filter-group .label{ font-weight:800; margin-bottom:6px; }
+
+/* 胶囊条 & 选中样式保持与前页一致 */
+.pill-bar{ display:flex; flex-wrap:wrap; gap:8px }
+.pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px; background:#fff;
+  border:1px solid #ffd6cc; cursor:pointer; font-weight:700; color:#a33;
+  transition:all .15s ease;
+}
+.pill:hover{ border-color:#ff8a65; background:#fffdf9; }
+.pill.on{
+  background:var(--primary,#e53935); color:#fff; border-color:transparent;
+  box-shadow:0 6px 14px rgba(229,57,53,.18);
+}
+
+/* 物料列表 */
+.mat-list{ display:grid; gap:10px; max-height:560px; overflow:auto; padding-right:6px; }
+.mat{
+  border:1px solid #f0f0f0; border-radius:14px; padding:10px; background:#fff;
+  display:grid; grid-template-columns: auto 1fr auto; gap:8px; align-items:center;
+}
+.mat .name{ font-weight:800 }
+.mat .meta{ color:#777; font-size:12px }
+.mat .stock{ font-weight:900 }
+.mat .btns{ display:flex; gap:8px }
+
+/* 采购预测卡片下方 KPI 三联 */
+.kpis{ display:grid; gap:12px; margin-top:10px }
+.kpis-3{ grid-template-columns: repeat(3,1fr); }
+.kpi{ background:#fff;border:1px solid #f4f4f4;border-radius:14px;padding:12px }
+.kpi .label{ color:#666; font-size:12px }
+.kpi-num{ font-weight:900; font-size:22px }
+
+/* 待采购清单 */
+.right-col .section-head{ display:flex; justify-content:space-between; align-items:center }
+.po-head, .po-row{
+  display:grid; grid-template-columns: 1.2fr 1.2fr .8fr .9fr .9fr 1.1fr 1fr; gap:10px;
+  padding:10px; border-bottom:1px solid #f4f4f4; align-items:center;
+}
+.po-head{ color:#888; font-size:12px }
+.po-row .qty{ font-weight:900 }
+
+/* 弹窗 */
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; z-index:9 }
+.modal.hide{ display:none }
+.dialog{ width:min(960px,92vw); background:#fff; border-radius:16px; box-shadow:var(--shadow); overflow:hidden }
+.dialog__hd{ display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #f2f2f2 }
+.dialog__bd{ padding:16px; display:grid; gap:12px }
+.dialog__ft{ padding:12px 16px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid #f2f2f2 }
+.x{ border:none; background:#fff; border-radius:8px; padding:6px; cursor:pointer }
+.md-grid{ grid-template-columns: 1.1fr 1.5fr; gap:16px }
+.md-col{ display:grid; gap:10px }
+.md-row{ display:grid; gap:6px }
+.md-val{ font-weight:800 }
+.sug{ margin:0; padding-left:18px }
+
+/* 让“待采购清单”与上方卡片更松 */
+.right-col{ margin-top: 6px; }
+
+/* 中列卡片更紧凑，消除“空荡感” */
+.mid-col{ display:grid; gap:12px; align-content:start }
+.mid-col .miniChart{ height:220px }  /* 折线高度略小，给下方内容留空间 */
+
+/* 缺口 Top3 */
+.gapbox{ background:#fff; border:1px solid #f4f4f4; border-radius:14px; padding:10px }
+.gapbox__hd{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px }
+.gap-list{ margin:0; padding:0; list-style:none; display:grid; gap:8px }
+.gap-item{ display:grid; grid-template-columns: 1.2fr 3fr auto; gap:10px; align-items:center }
+.gap-item .bar{ height:8px; background:#ffe5dd; border-radius:999px; overflow:hidden }
+.gap-item .bar i{ display:block; height:100%; width:0; background:#ff6b00; border-radius:999px }
+.gap-item .qty{ font-weight:900 }
+
